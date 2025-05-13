@@ -1,0 +1,7 @@
+graph grafoDorogovtsevMendes_100_DFS_R  {
+n_0;
+n_1;
+n_2;
+n_0 -- n_1;
+n_1 -- n_2;
+}
