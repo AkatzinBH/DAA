@@ -6,7 +6,7 @@ from graph import Graph
 
 def grafoMalla(m, n, dirigido=False):
     """
-    Genera un grafo de malla
+    Genera un grafo de malla con IDs de nodo enteros.
     :param m: número de columnas (> 1)
     :param n: número de filas (> 1)
     :param dirigido: el grafo es dirigido?
@@ -18,20 +18,25 @@ def grafoMalla(m, n, dirigido=False):
 
     grafo = Graph(id=f"grafoMalla_{m}_{n}", dirigido=dirigido)
     nodos = {}
-
-    # Crear nodos
+    
+    # Crear nodos con IDs enteros
+    contador_id_nodo = 0  # Inicializar un contador para los IDs
     for i in range(m):
         for j in range(n):
-            nodo = Node((i, j))
+            nodo = Node(contador_id_nodo)  # Usar el contador como ID
             nodos[(i, j)] = nodo
             grafo.add_nodo(nodo)
+            contador_id_nodo += 1  # Incrementar el contador
 
     # Crear aristas
     for i in range(m):
         for j in range(n):
+            id_nodo_actual = i * n + j  # Calcular el ID del nodo actual
             if i < m - 1:  # Arista hacia el nodo de abajo
+                id_vecino_abajo = (i + 1) * n + j
                 grafo.add_arista(Edge(nodos[(i, j)], nodos[(i + 1, j)]))
             if j < n - 1:  # Arista hacia el nodo de la derecha
+                id_vecino_derecha = i * n + (j + 1)
                 grafo.add_arista(Edge(nodos[(i, j)], nodos[(i, j + 1)]))
 
     return grafo
