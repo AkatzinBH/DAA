@@ -171,12 +171,12 @@ class Graph:
                 for arista in self.E.values():
                     if arista.u.id == nodo_actual_id and arista.v.id not in visitados:
                         arbol_dfs.add_nodo(self.V[arista.v.id])
-                        arbol_dfs.add_arista(Edge(self.V[arista.u.id], self.V[arista.v.id]))  # Corrección aquí
+                        arbol_dfs.add_arista(Edge(self.V[arista.u.id], self.V[arista.v.id]))  
                         pila.append(arista.v.id)
                         visitados.add(arista.v.id)  # Marcar el nodo vecino como visitado
                     elif arista.v.id == nodo_actual_id and arista.u.id not in visitados:  # Siempre revisa la otra dirección
                         arbol_dfs.add_nodo(self.V[arista.u.id])
-                        arbol_dfs.add_arista(Edge(self.V[arista.v.id], self.V[arista.u.id]))  # Y aquí
+                        arbol_dfs.add_arista(Edge(self.V[arista.v.id], self.V[arista.u.id]))  
                         pila.append(arista.u.id)
                         visitados.add(arista.u.id)  # Marcar el nodo vecino como visitado
 
