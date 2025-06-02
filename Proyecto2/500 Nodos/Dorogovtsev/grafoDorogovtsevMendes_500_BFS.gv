@@ -1,7 +1,0 @@
-graph grafoDorogovtsevMendes_500_BFS  {
-n_0;
-n_1;
-n_2;
-n_0 -- n_1;
-n_1 -- n_2;
-}
