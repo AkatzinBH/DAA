@@ -286,7 +286,7 @@ class Graph:
 
         mst = Graph(id=f"{self.id}_KruskalD")
 
-        # Ordenar aristas por peso
+        # Ordena aristas por peso
         edges_sorted = list(self.E.values())
         edges_sorted.sort(key = lambda edge: edge.attrs['weight'])
 
@@ -299,18 +299,18 @@ class Graph:
         for edge in edges_sorted:
             u, v = edge.u, edge.v
             if connected_comp[u.id] != connected_comp[v.id]:
-                # Añadir nodos y arista al mst
+                # Añade nodos y aristas al mst
                 mst.add_nodo(u)
                 mst.add_nodo(v)
                 mst.add_arista(edge)
 
-                # Cambiar la componente conectada de v para que sea la misma que u
+                # Cambia la componente conectada de v para que sea la misma que u
                 for comp in connected_comp:
                     if connected_comp[comp] == connected_comp[v.id]:
                         other_comp = connected_comp[v.id]
                         connected_comp[comp] = connected_comp[u.id]
 
-                        # Si cambiamos la componente conectada de un nodo,
+                        # Si se cambia la componente conectada de un nodo,
                         # cambiarla para toda la componente conectada
                         iterator = (key for key in connected_comp \
                                     if connected_comp[key] == other_comp)
@@ -330,27 +330,27 @@ class Graph:
         mst : Grafo
             árbol de expansión mínima (mst)
         """
-        mst = self.clone() # Usar clone en lugar de copy_grafo
+        mst = self.clone() 
         mst.id = f"{self.id}_KruskalI" # Actualizar el ID del grafo clonado
 
-        # Ordenar aristas por peso
+        # Ordena aristas por peso
         edges_sorted = list(self.E.values())
         edges_sorted.sort(key = lambda edge: edge.attrs['weight'], reverse=True)
 
-        # Empezar a eliminar aristas del mst
+        # Elimina aristas del mst
         for edge in edges_sorted:
             u, v = edge.u.id, edge.v.id
-            # Verificar si la arista existe en mst.E antes de intentar eliminarla
+            # Verifica si la arista existe en mst.E antes de intentar eliminarla
             if (u, v) in mst.E:
                 del(mst.E[(u, v)])
-            elif (v, u) in mst.E: # Para grafos no dirigidos, verificar también la dirección inversa
+            elif (v, u) in mst.E: # Para grafos no dirigidos, verifica también la dirección inversa
                 del(mst.E[(v, u)])
             else:
-                continue # Arista no encontrada, omitir
+                continue # Arista no encontrada
 
             # Si el grafo no está conectado después de la eliminación, volver a colocar la arista
             # Verificar si mst.V está vacío antes de llamar a BFS
-            if not mst.V or len(mst.BFS(self.V[edge.u.id]).V) != len(mst.V): # Pasar el objeto Node real
+            if not mst.V or len(mst.BFS(self.V[edge.u.id]).V) != len(mst.V): 
                 # Volver a colocar la arista. Asegurarse de que la arista se añada con su dirección/clave original
                 # Esto asume que edge.id es una tupla (u.id, v.id) o (v.id, u.id)
                 mst.add_arista(edge) # Usar add_arista para manejar tanto dirigido/no dirigido
@@ -395,23 +395,23 @@ class Graph:
             self.V[u].attrs['dist'] = u_dist
             mst.add_nodo(self.V[u])
             if parents[u] is not None:
-                # Usar Edge directamente, asumiendo que maneja objetos de nodo
+                # Crea una arista desde el padre al nodo actual
                 arista = Edge(self.V[parents[u]], self.V[u]) 
-                # Encontrar el peso de las aristas del grafo original
+                # Encuentra el peso de las aristas del grafo original
                 if (u, parents[u]) in self.E:
                     weight = self.E[(u, parents[u])].attrs['weight']
                 elif (parents[u], u) in self.E: # Verificar para grafo no dirigido
                     weight = self.E[(parents[u], u)].attrs['weight']
                 else:
-                    weight = 0 # Valor por defecto o manejo de errores si la arista no se encuentra
+                    weight = 0 # Valor por defecto o si la arista no se encuentra
                 arista.attrs['weight'] = weight
                 mst.add_arista(arista)
             in_tree.add(u)
 
             # Obtener nodos vecinos
             neigh = []
-            for arista_id in self.E: # Iterar sobre las claves (tuplas)
-                # Verificar si el nodo actual 'u' es parte de la arista
+            for arista_id in self.E: # Itera sobre las claves (tuplas)
+                # Verifica si el nodo actual 'u' es parte de la arista
                 if self.V[u].id == arista_id[0]:
                     v = arista_id[1]
                 elif self.V[u].id == arista_id[1]:
@@ -419,14 +419,15 @@ class Graph:
                 else:
                     continue # No conectado a 'u'
 
-                if v not in in_tree:
+                if v not in in_tree: #Verifica que 'v' no esté ya en el árbol
+                    # Añade el vecino a la lista de vecinos
                     neigh.append(v)
 
-            # Actualizar distancias de ser necesario
+            # Actualiza las distancias
             for v in neigh:
                 arista_key = (u, v) if (u, v) in self.E else (v, u)
                 if line[v] > self.E[arista_key].attrs['weight']:
-                    line[v] = self.E[arista_key].attrs['weight']
-                    parents[v] = u
+                    line[v] = self.E[arista_key].attrs['weight'] 
+                    parents[v] = u #Actualiza el padre del nodo vecino
 
         return mst
