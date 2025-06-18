@@ -32,15 +32,14 @@ def main():
     print("Grafico Geografico")
     grafo = grafoGeografico(nodos, r_Geografico)
     spring(grafo)
-"""
+
     print("Grafico Barabasi-Albert")
     grafo = grafoBarabasiAlbert(nodos, d_Barabasi, dirigido=False)
-    grafo.to_graphviz(grafo.id + ".gv")
     spring(grafo)
-"""
+    """
     print("Grafico Dorogovtsev-Mendes")
     grafo = grafoDorogovtsevMendes(nodos)
     spring(grafo)
-"""
+
 if __name__ == "__main__":
     main()
